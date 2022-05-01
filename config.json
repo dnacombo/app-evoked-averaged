@@ -1,6 +1,6 @@
 {
 
-    "fif": "/network/lustre/iss01/home/saeed.zahran/mne_data/MNE-sample-data/MEG/sample/sample_audvis_raw.fif",
+    "fif": "/network/lustre/iss01/home/saeed.zahran/mne_data/MNE-sample-data/MEG/sample/evo.fif",
     "t_min": -0.3,
     "t_max": 0.7
 
