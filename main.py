@@ -24,9 +24,9 @@ def evoked(epochs):
       # == SAVE REPORT ==
     report.save('out_dir_report/report.html', overwrite=True)
     # == SAVE FILE ==
-    evoked.save(os.path.join('out_dir', 'evoked-epo.fif'))
+    evokeds.save(os.path.join('out_dir', 'evoked-epo.fif'))
 
-    return evoked
+    return evokeds
 
 
 def main():
