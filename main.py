@@ -20,7 +20,9 @@ def evoked(epochs):
                 ],
         n_time_points=5
     )
-    report.save('report_evoked.html', overwrite=True)
+    
+      # == SAVE REPORT ==
+    report.save('out_dir_report/report.html', overwrite=True)
     # == SAVE FILE ==
     evoked.save(os.path.join('out_dir', 'evoked-epo.fif'))
 
