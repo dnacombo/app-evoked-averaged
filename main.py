@@ -12,7 +12,7 @@ def evoked(epochs):
     
     e1 = epochs[1].average()
     evokeds_subset=e1
-    evokeds_subset.pick('eeg')
+    evokeds_subset.pick('meg')
     report = mne.Report(title='Evoked example')
     report.add_evokeds(
         evokeds=evokeds_subset,
