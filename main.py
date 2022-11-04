@@ -8,25 +8,27 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-def evoked(epochs):
-    
-    e1 = epochs[1].average()
-    evokeds_subset=e1
-    evokeds_subset.pick('meg')
-    report = mne.Report(title='Evoked example')
-    report.add_evokeds(
-        evokeds=evokeds_subset,
-        titles=['evoked 1' # Manually specify titles
-                ],
-        n_time_points=5
-    )
-    
-      # == SAVE REPORT ==
-    report.save('out_dir_report/report.html', overwrite=True)
-    # == SAVE FILE ==
-    evokeds.save(os.path.join('out_dir', 'evoked-epo.fif'))
+def evoked(epochs, ch_type):
 
-    return evokeds
+    evoked= epochs.average()
+
+
+    plt.figure(1)
+    fig1=evoked.plot(spatial_colors=True)
+    fig1.savefig(os.path.join('out_figs', 'evoke.png'))
+
+    plt.figure(2)
+    fig2=evoked.plot_topomap(ch_type=ch_type)
+    fig2.savefig(os.path.join('out_figs', 'evoketopo.png'))
+
+
+    plt.figure(3)
+    fig3=evoked.plot_joint(picks=ch_type)
+    fig3.savefig(os.path.join('out_figs', 'evokejoint.png'))
+
+
+
+
 
 
 def main():
@@ -37,7 +39,7 @@ def main():
     # Read the epoch file
     data_file = config.pop('fif')
     epochs = mne.read_epochs(data_file , preload=False)
-    evok = evoked(epochs)
+    evok = evoked(epochs,config['ch_type'])
 
 if __name__ == '__main__':
     main()
