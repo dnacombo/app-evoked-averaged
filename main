@@ -1,12 +1,12 @@
 #!/bin/bash
 
-#PBS -l nodes=1:ppn=8
+#PBS -l nodes=1:ppn=1
 #PBS -l walltime=00:10:00
 
 # Make output directories
 mkdir -p out_dir
 mkdir -p out_figs
-mkdir -p out_dir_report
+
 
 singularity exec docker://brainlife/mne:1.0.2 python3 main.py
 
@@ -17,9 +17,20 @@ cat << EOF > product.json
     "brainlife": [
        {
            "type": "image/png",
-	         "name": "Evoked image",
-           "base64": "$(base64 -w 0 out_figs/evoked_plot.png)"
+	         "name": "signal traces",
+           "base64": "$(base64 -w 0 out_figs/evoke.png)"
+       },
+       {
+           "type": "image/png",
+	         "name": "scalp topographies",
+           "base64": "$(base64 -w 0 out_figs/evoketopo.png)"
+       },
+       {
+           "type": "image/png",
+	         "name": "Joint plots",
+           "base64": "$(base64 -w 0 out_figs/evokejoint.png)"
        }
+
 
 ]
 }
