@@ -25,6 +25,10 @@ def evoked(epochs, ch_type):
     plt.figure(3)
     fig3=evoked.plot_joint(picks=ch_type)
     fig3.savefig(os.path.join('out_figs', 'evokejoint.png'))
+    
+    mne.write_evokeds(os.path.join('out_dir', 'evokeds_ave.fif'), evoked, overwrite=True)
+    
+
 
 
 
