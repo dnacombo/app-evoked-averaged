@@ -13,7 +13,7 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-def evoked(epochs, ch_type):
+def evoked(epochs, ch_type, timepoints_from, timepoints_to, step):
 
     evoked= epochs.average()
 
@@ -44,7 +44,7 @@ def main():
     # Read the epoch file
     data_file = config.pop('fif')
     epochs = mne.read_epochs(data_file , preload=False)
-    evok = evoked(epochs,config['ch_type'],config['timepoints_from'], config['timepoints_to'], config['step'])
+    evok = evoked(epochs,config['ch_type'],config['timepoints_from'],config['timepoints_to'],config['step'])
 
 if __name__ == '__main__':
     main()
