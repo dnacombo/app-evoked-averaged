@@ -6,7 +6,7 @@
 # Make output directories
 mkdir -p out_dir
 mkdir -p out_figs
-
+mkdir -p out_report
 
 singularity exec docker://brainlife/mne:1.2.1 python3 main.py
 
@@ -18,20 +18,8 @@ cat << EOF > product.json
        {
            "type": "image/png",
 	         "name": "signal traces",
-           "base64": "$(base64 -w 0 out_figs/evoke.png)"
-       },
-       {
-           "type": "image/png",
-	         "name": "scalp topographies",
-           "base64": "$(base64 -w 0 out_figs/evoketopo.png)"
-       },
-       {
-           "type": "image/png",
-	         "name": "Joint plots",
-           "base64": "$(base64 -w 0 out_figs/evokejoint.png)"
+           "base64": "$(base64 -w 0 out_figs/evoked.png)"
        }
-
-
 ]
 }
 EOF

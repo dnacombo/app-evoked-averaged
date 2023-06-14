@@ -12,41 +12,35 @@ import matplotlib.pyplot as plt
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
+# Load inputs from config.json
+with open('config.json') as config_json:
+    config = json.load(config_json)
+tmp = dict((k, None) for k, v in config.items() if v == "")
+config.update(tmp)
 
-def evoked(epochs, ch_type, timepoints_from, timepoints_to, step):
+# Read the epoch file
+data_file = config.pop('fif')
+epochs = mne.read_epochs(data_file , preload=True)
 
-    evoked= epochs.average()
+evoked= epochs.average(config['picks'],config['method'], by_event_type=config['by_event_type'])
 
+plt.figure(1)
+if isinstance(evoked, list):
+    titles = evoked[0].comment
+    fig1 = evoked[0].plot(spatial_colors=True)
+    fig1.text(0., 1., 'Evoked response for condition ' + titles + ' ... others in report.html', horizontalalignment='left', verticalalignment='top')
+    titles = [ev.comment for ev in evoked]
+else:
+    titles = evoked.comment
+    fig1 = evoked.plot(spatial_colors=True)
+    fig1.text(0., 1., 'Evoked response for condition ' + titles, horizontalalignment='left', verticalalignment='top')
 
-    plt.figure(1)
-    fig1=evoked.plot(spatial_colors=True)
-    fig1.savefig(os.path.join('out_figs', 'evoke.png'))
+fig1.savefig(os.path.join('out_figs', 'evoked.png'))
+
     
-    times = np.arange(timepoints_from, timepoints_to, step)
+report = mne.Report(title='ICA')
+report.add_evokeds(evokeds=evoked, titles=titles)
+report.save('out_report/report_evoked.html', overwrite=True)
 
-    plt.figure(2)
-    fig2=evoked.plot_topomap(times , ch_type=ch_type)
-    fig2.savefig(os.path.join('out_figs', 'evoketopo.png'))
-
-
-    plt.figure(3)
-    fig3=evoked.plot_joint(times, picks=ch_type)
-    fig3.savefig(os.path.join('out_figs', 'evokejoint.png'))
-    
-    mne.write_evokeds(os.path.join('out_dir', 'evokeds_ave.fif'), evoked, overwrite=True)
-    
-
-def main():
-    # Load inputs from config.json
-    with open('config.json') as config_json:
-        config = json.load(config_json)
-
-    # Read the epoch file
-    data_file = config.pop('fif')
-    epochs = mne.read_epochs(data_file , preload=False)
-    evok = evoked(epochs,config['ch_type'],config['timepoints_from'],config['timepoints_to'],config['step'])
-
-if __name__ == '__main__':
-    main()
-
+mne.write_evokeds(os.path.join('out_dir', 'evokeds_ave.fif'), evoked, overwrite=True)
 
